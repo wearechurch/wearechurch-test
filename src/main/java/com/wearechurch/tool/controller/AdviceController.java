@@ -2,6 +2,7 @@ package com.wearechurch.tool.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.codec.CodecException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.wearechurch.tool.Response;
+import com.wearechurch.tool.dto.Response;
 import com.wearechurch.tool.enumerator.Reply;
 import com.wearechurch.tool.exception.RarityException;
 
@@ -53,6 +54,11 @@ public class AdviceController {
 	@ExceptionHandler(NumberFormatException.class)
 	public ResponseEntity<Response> numberFormatException(final NumberFormatException exception) {
 		return logResponse(exception, Reply.NUMBER_FORMAT);
+	}
+
+	@ExceptionHandler(CodecException.class)
+	public ResponseEntity<Response> rarity(final CodecException exception) {
+		return ResponseEntity.ok(new Response(Reply.CODEC));
 	}
 
 	@ExceptionHandler(RarityException.class)

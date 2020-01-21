@@ -1,4 +1,4 @@
-package com.wearechurch.tool;
+package com.wearechurch.tool.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
