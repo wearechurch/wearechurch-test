@@ -1,5 +1,7 @@
 package com.wearechurch.tool.enumerator;
 
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
+
 public enum Reply {
 	OK(0, "OK"), EXCEPTION(5, "Tenemos un problema interno, intentalo más tarde."),
 	CODEC(16, "Problema al codificar y decodificar hacia y desde una secuencia de objetos"),
@@ -24,6 +26,13 @@ public enum Reply {
 
 	public String getMessage() {
 		return message;
+	}
+
+	public Reply solveStrangers(final Exception exception) {
+		if (exception.getClass().isAssignableFrom(BadRequest.class)) {
+			return Reply.CLIENT_ERROR;
+		}
+		return Reply.EXCEPTION;
 	}
 
 }

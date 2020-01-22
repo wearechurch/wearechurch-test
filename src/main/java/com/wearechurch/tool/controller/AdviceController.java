@@ -9,7 +9,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.client.HttpClientErrorException.BadRequest;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.wearechurch.tool.dto.Response;
 import com.wearechurch.tool.enumerator.Reply;
@@ -22,7 +22,7 @@ public class AdviceController {
 
 	private static final ResponseEntity<Response> logResponse(final Exception exception, final Reply reply) {
 		AdviceController.LOGGER.error("Code: {} | Class: {} | Message: {}", reply.getCode(),
-				exception.getClass().getSimpleName(), exception.getLocalizedMessage());
+				exception.getClass().getName(), exception.getLocalizedMessage());
 		return ResponseEntity.ok(new Response(reply));
 	}
 
@@ -36,8 +36,8 @@ public class AdviceController {
 		return AdviceController.logResponse(exception, Reply.EXCEPTION);
 	}
 
-	@ExceptionHandler(BadRequest.class)
-	public ResponseEntity<Response> httpClientErrorException(final BadRequest exception) {
+	@ExceptionHandler(HttpClientErrorException.class)
+	public ResponseEntity<Response> httpClientErrorException(final HttpClientErrorException exception) {
 		return AdviceController.logResponse(exception, Reply.CLIENT_ERROR);
 	}
 
