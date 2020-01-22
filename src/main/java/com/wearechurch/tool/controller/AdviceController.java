@@ -76,6 +76,11 @@ public class AdviceController {
 		return ResponseEntity.ok(new Response(exception.getReply()));
 	}
 
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<Response> runtimeException(final RuntimeException exception) {
+		return AdviceController.logResponse(exception, Reply.RUNTIME);
+	}
+
 	@ExceptionHandler({ BadRequest.class, NotFound.class, WebClientResponseException.class })
 	public ResponseEntity<Response> webClientResponseException(final WebClientResponseException exception) {
 		return AdviceController.logResponse(exception, Reply.CLIENT_RESPONSE);

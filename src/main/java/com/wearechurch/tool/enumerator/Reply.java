@@ -3,7 +3,7 @@ package com.wearechurch.tool.enumerator;
 public enum Reply {
 	OK(0, "OK"), EXCEPTION(5, "Tenemos un problema interno, intentalo más tarde."),
 	CODEC_CODEC(22, "Problema al codificar y decodificar hacia y desde una secuencia de objetos"),
-	NET_CONNECT(44, "La conexión se rechazó de forma remota."),
+	NET_CONNECT(44, "La conexión se rechazó de forma remota."), RUNTIME(48, "Tenemos un problema interno."),
 	NUMBER_FORMAT(75, "Se intentó convertir una cadena a un tipo numérico, pero no tuvo el formato apropiado."),
 	VERSION_OUTDATED(78, "Hay una nueva versión de la app, la que tienes dejó de ser compatible."),
 	VERSION_UPGRADABLE(90, "Hay una nueva versión de la app."),
