@@ -9,7 +9,8 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.reactive.function.client.WebClientResponseException.BadRequest;
 
 import com.wearechurch.tool.dto.Response;
 import com.wearechurch.tool.enumerator.Reply;
@@ -28,17 +29,12 @@ public class AdviceController {
 
 	@ExceptionHandler(CodecException.class)
 	public ResponseEntity<Response> codecException(final CodecException exception) {
-		return ResponseEntity.ok(new Response(Reply.CODEC));
+		return ResponseEntity.ok(new Response(Reply.CODEC_CODEC));
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Response> exception(final Exception exception) {
-		return AdviceController.logResponse(exception, Reply.solveStrangers(exception));
-	}
-
-	@ExceptionHandler(HttpClientErrorException.class)
-	public ResponseEntity<Response> httpClientErrorException(final HttpClientErrorException exception) {
-		return AdviceController.logResponse(exception, Reply.CLIENT_ERROR);
+		return AdviceController.logResponse(exception, Reply.EXCEPTION);
 	}
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
@@ -70,6 +66,21 @@ public class AdviceController {
 	@ExceptionHandler(RarityException.class)
 	public ResponseEntity<Response> rarityException(final RarityException exception) {
 		return ResponseEntity.ok(new Response(exception.getReply()));
+	}
+
+	@ExceptionHandler({ BadRequest.class, WebClientResponseException.class })
+	public ResponseEntity<Response> webClientResponseException(final WebClientResponseException exception) {
+		return AdviceController.logResponse(exception, Reply.CLIENT_RESPONSE);
+	}
+
+	@ExceptionHandler(java.net.ConnectException.class)
+	public ResponseEntity<Response> z(final java.net.ConnectException exception) {
+		return AdviceController.logResponse(exception, Reply.NET_CONNECT);
+	}
+
+	@ExceptionHandler(java.rmi.ConnectException.class)
+	public ResponseEntity<Response> zz(final java.rmi.ConnectException exception) {
+		return AdviceController.logResponse(exception, Reply.RMI_CONNECT);
 	}
 
 }
