@@ -1,5 +1,7 @@
 package com.wearechurch.tool.controller;
 
+import java.net.ConnectException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.codec.CodecException;
@@ -30,7 +32,12 @@ public class AdviceController {
 
 	@ExceptionHandler(CodecException.class)
 	public ResponseEntity<Response> codecException(final CodecException exception) {
-		return ResponseEntity.ok(new Response(Reply.CODEC_CODEC));
+		return AdviceController.logResponse(exception, Reply.CODEC_CODEC);
+	}
+
+	@ExceptionHandler(ConnectException.class)
+	public ResponseEntity<Response> connectException(final ConnectException exception) {
+		return AdviceController.logResponse(exception, Reply.NET_CONNECT);
 	}
 
 	@ExceptionHandler(Exception.class)
@@ -72,16 +79,6 @@ public class AdviceController {
 	@ExceptionHandler({ BadRequest.class, NotFound.class, WebClientResponseException.class })
 	public ResponseEntity<Response> webClientResponseException(final WebClientResponseException exception) {
 		return AdviceController.logResponse(exception, Reply.CLIENT_RESPONSE);
-	}
-
-	@ExceptionHandler(java.net.ConnectException.class)
-	public ResponseEntity<Response> z(final java.net.ConnectException exception) {
-		return AdviceController.logResponse(exception, Reply.NET_CONNECT);
-	}
-
-	@ExceptionHandler(java.rmi.ConnectException.class)
-	public ResponseEntity<Response> zz(final java.rmi.ConnectException exception) {
-		return AdviceController.logResponse(exception, Reply.RMI_CONNECT);
 	}
 
 }
