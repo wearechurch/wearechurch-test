@@ -12,7 +12,15 @@ public enum Reply {
 	MESSAGE_READABLE(295, "El método falló."),
 	REQUEST_SUPPORTED(474, "El controlador de solicitudes no admitió el método de solicitud específico.");
 
+	public static final Reply solveStrangers(final Exception exception) {
+		if (exception.getClass().isAssignableFrom(BadRequest.class)) {
+			return Reply.CLIENT_ERROR;
+		}
+		return Reply.EXCEPTION;
+	}
+
 	private Integer code;
+
 	private String message;
 
 	private Reply(final Integer code, final String message) {
@@ -26,13 +34,6 @@ public enum Reply {
 
 	public String getMessage() {
 		return message;
-	}
-
-	public Reply solveStrangers(final Exception exception) {
-		if (exception.getClass().isAssignableFrom(BadRequest.class)) {
-			return Reply.CLIENT_ERROR;
-		}
-		return Reply.EXCEPTION;
 	}
 
 }

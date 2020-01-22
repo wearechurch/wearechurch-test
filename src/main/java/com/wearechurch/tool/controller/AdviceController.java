@@ -21,7 +21,7 @@ public class AdviceController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdviceController.class);
 
 	private static final ResponseEntity<Response> logResponse(final Exception exception, final Reply reply) {
-		AdviceController.LOGGER.error("Code: {} | Class: {} | Message: {}", reply.getCode(),
+		AdviceController.LOGGER.error("Code: {} | ClassName: {} | Message: {}", reply.getCode(),
 				exception.getClass().getName(), exception.getLocalizedMessage());
 		return ResponseEntity.ok(new Response(reply));
 	}
@@ -33,7 +33,7 @@ public class AdviceController {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Response> exception(final Exception exception) {
-		return AdviceController.logResponse(exception, Reply.EXCEPTION);
+		return AdviceController.logResponse(exception, Reply.solveStrangers(exception));
 	}
 
 	@ExceptionHandler(HttpClientErrorException.class)
