@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.reactive.function.client.WebClientResponseException.BadRequest;
+import org.springframework.web.reactive.function.client.WebClientResponseException.NotFound;
 
 import com.wearechurch.tool.dto.Response;
 import com.wearechurch.tool.enumerator.Reply;
@@ -68,7 +69,7 @@ public class AdviceController {
 		return ResponseEntity.ok(new Response(exception.getReply()));
 	}
 
-	@ExceptionHandler({ BadRequest.class, WebClientResponseException.class })
+	@ExceptionHandler({ BadRequest.class, NotFound.class, WebClientResponseException.class })
 	public ResponseEntity<Response> webClientResponseException(final WebClientResponseException exception) {
 		return AdviceController.logResponse(exception, Reply.CLIENT_RESPONSE);
 	}
