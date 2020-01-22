@@ -9,6 +9,9 @@ public class Response {
 	private Integer code;
 	private String message;
 
+	public Response() {
+	}
+
 	public Response(final Reply reply) {
 		code = reply.getCode();
 		message = reply.getMessage();
