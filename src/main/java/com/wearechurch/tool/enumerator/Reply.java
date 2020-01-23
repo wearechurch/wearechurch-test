@@ -2,6 +2,7 @@ package com.wearechurch.tool.enumerator;
 
 public enum Reply {
 	OK(0, "OK"), EXCEPTION(5, "Tenemos un problema interno, intentalo más tarde."),
+	BIND(14, "Los errores vinculantes se consideran fatales."),
 	CODEC_CODEC(22, "Problema al codificar y decodificar hacia y desde una secuencia de objetos"),
 	NET_CONNECT(44, "La conexión se rechazó de forma remota."), RUNTIME(48, "Tenemos un problema interno."),
 	NUMBER_FORMAT(75, "Se intentó convertir una cadena a un tipo numérico, pero no tuvo el formato apropiado."),

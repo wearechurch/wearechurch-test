@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.codec.CodecException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,6 +29,11 @@ public class AdviceController {
 		AdviceController.LOGGER.error("Code: {} | ClassName: {} | Message: {}", reply.getCode(),
 				exception.getClass().getName(), exception.getLocalizedMessage());
 		return ResponseEntity.ok(new Response(reply));
+	}
+
+	@ExceptionHandler(BindException.class)
+	public ResponseEntity<Response> bindException(final BindException exception) {
+		return AdviceController.logResponse(exception, Reply.BIND);
 	}
 
 	@ExceptionHandler(CodecException.class)
