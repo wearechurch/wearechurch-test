@@ -21,6 +21,7 @@ import com.wearechurch.tool.dto.Response;
 import com.wearechurch.tool.enumerator.Reply;
 import com.wearechurch.tool.exception.RarityException;
 
+import io.netty.handler.ssl.NotSslRecordException;
 import reactor.netty.http.client.PrematureCloseException;
 
 @ControllerAdvice
@@ -78,6 +79,11 @@ public class AdviceController {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Response> methodArgumentNotValidException(final MethodArgumentNotValidException exception) {
 		return AdviceController.logResponse(exception, Reply.METHOD_ARGUMENT);
+	}
+
+	@ExceptionHandler(NotSslRecordException.class)
+	public ResponseEntity<Response> notSslRecordException(final NotSslRecordException exception) {
+		return AdviceController.logResponse(exception, Reply.SSL_RECORD);
 	}
 
 	@ExceptionHandler(NullPointerException.class)

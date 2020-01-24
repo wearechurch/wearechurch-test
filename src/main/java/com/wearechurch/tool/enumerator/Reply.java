@@ -2,6 +2,7 @@ package com.wearechurch.tool.enumerator;
 
 public enum Reply {
 	OK(0, "OK"), EXCEPTION(5, "Tenemos un problema interno, intentalo más tarde."),
+	SSL_RECORD(1, "Se intenta usar una conexión segura y otra conexión simple."),
 	NULL_POINTER(1, "Se intenta usar <null> en un caso donde se requiere un objeto."),
 	UNKNOWN_HOST(1, "No se pudo determinar la dirección IP de un host"),
 	BIND(14, "Los errores vinculantes se consideran fatales."),
