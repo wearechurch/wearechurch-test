@@ -1,6 +1,7 @@
 package com.wearechurch.tool.controller;
 
 import java.net.ConnectException;
+import java.net.UnknownHostException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,8 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import com.wearechurch.tool.dto.Response;
 import com.wearechurch.tool.enumerator.Reply;
 import com.wearechurch.tool.exception.RarityException;
+
+import reactor.netty.http.client.PrematureCloseException;
 
 @ControllerAdvice
 public class AdviceController {
@@ -62,6 +65,11 @@ public class AdviceController {
 		return AdviceController.logResponse(exception, Reply.REQUEST_SUPPORTED);
 	}
 
+	@ExceptionHandler(IllegalStateException.class)
+	public ResponseEntity<Response> illegalStateException(final IllegalStateException exception) {
+		return AdviceController.logResponse(exception, Reply.ILLEGAL_STATE);
+	}
+
 	@ExceptionHandler(IndexOutOfBoundsException.class)
 	public ResponseEntity<Response> indexOutOfBoundsException(final IndexOutOfBoundsException exception) {
 		return AdviceController.logResponse(exception, Reply.INDEX_BOUNDS);
@@ -72,9 +80,19 @@ public class AdviceController {
 		return AdviceController.logResponse(exception, Reply.METHOD_ARGUMENT);
 	}
 
+	@ExceptionHandler(NullPointerException.class)
+	public ResponseEntity<Response> nullPointerException(final NullPointerException exception) {
+		return AdviceController.logResponse(exception, Reply.NULL_POINTER);
+	}
+
 	@ExceptionHandler(NumberFormatException.class)
 	public ResponseEntity<Response> numberFormatException(final NumberFormatException exception) {
 		return AdviceController.logResponse(exception, Reply.NUMBER_FORMAT);
+	}
+
+	@ExceptionHandler(PrematureCloseException.class)
+	public ResponseEntity<Response> prematureCloseException(final PrematureCloseException exception) {
+		return AdviceController.logResponse(exception, Reply.PREMATURE_CLOSE);
 	}
 
 	@ExceptionHandler(RarityException.class)
@@ -85,6 +103,11 @@ public class AdviceController {
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<Response> runtimeException(final RuntimeException exception) {
 		return AdviceController.logResponse(exception, Reply.RUNTIME);
+	}
+
+	@ExceptionHandler(UnknownHostException.class)
+	public ResponseEntity<Response> unknownHostException(final UnknownHostException exception) {
+		return AdviceController.logResponse(exception, Reply.UNKNOWN_HOST);
 	}
 
 	@ExceptionHandler({ BadRequest.class, NotFound.class, WebClientResponseException.class })
