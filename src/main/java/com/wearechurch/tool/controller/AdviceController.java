@@ -36,95 +36,96 @@ public class AdviceController {
 
 	@ExceptionHandler(BindException.class)
 	public ResponseEntity<Response> bindException(final BindException exception) {
-		return logResponse(exception, Reply.BIND);
+		return buildResponse(exception, Reply.BIND);
+	}
+
+	private final ResponseEntity<Response> buildResponse(final Exception exception, final Reply reply) {
+		AdviceController.LOGGER.error("Code: {} | ClassName: {} | Message: {}", reply.getCode(),
+				exception.getClass().getName(), exception.getLocalizedMessage());
+		final Response response = new Response(reply);
+		response.setApplication(properties.getSpringApplicationName());
+		return ResponseEntity.ok(response);
 	}
 
 	@ExceptionHandler(CodecException.class)
 	public ResponseEntity<Response> codecException(final CodecException exception) {
-		return logResponse(exception, Reply.CODEC);
+		return buildResponse(exception, Reply.CODEC);
 	}
 
 	@ExceptionHandler(ConnectException.class)
 	public ResponseEntity<Response> connectException(final ConnectException exception) {
-		return logResponse(exception, Reply.CONNECT);
+		return buildResponse(exception, Reply.CONNECT);
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Response> exception(final Exception exception) {
-		return logResponse(exception, Reply.EXCEPTION);
+		return buildResponse(exception, Reply.EXCEPTION);
 	}
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<Response> httpMessageNotReadableException(final HttpMessageNotReadableException exception) {
-		return logResponse(exception, Reply.MESSAGE_READABLE);
+		return buildResponse(exception, Reply.MESSAGE_READABLE);
 	}
 
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public final ResponseEntity<Response> httpRequestMethodNotSupportedException(
 			final HttpRequestMethodNotSupportedException exception) {
-		return logResponse(exception, Reply.REQUEST_SUPPORTED);
+		return buildResponse(exception, Reply.REQUEST_SUPPORTED);
 	}
 
 	@ExceptionHandler(IllegalStateException.class)
 	public ResponseEntity<Response> illegalStateException(final IllegalStateException exception) {
-		return logResponse(exception, Reply.ILLEGAL_STATE);
+		return buildResponse(exception, Reply.ILLEGAL_STATE);
 	}
 
 	@ExceptionHandler(IndexOutOfBoundsException.class)
 	public ResponseEntity<Response> indexOutOfBoundsException(final IndexOutOfBoundsException exception) {
-		return logResponse(exception, Reply.INDEX_BOUNDS);
-	}
-
-	private final ResponseEntity<Response> logResponse(final Exception exception, final Reply reply) {
-		AdviceController.LOGGER.error("Application: {}\nCode: {}\nClassName: {}\nMessage: {}",
-				properties.getSpringApplicationName(), reply.getCode(), exception.getClass().getName(),
-				exception.getLocalizedMessage());
-		return ResponseEntity.ok(new Response(reply));
+		return buildResponse(exception, Reply.INDEX_BOUNDS);
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Response> methodArgumentNotValidException(final MethodArgumentNotValidException exception) {
-		return logResponse(exception, Reply.METHOD_ARGUMENT);
+		return buildResponse(exception, Reply.METHOD_ARGUMENT);
 	}
 
 	@ExceptionHandler(NotSslRecordException.class)
 	public ResponseEntity<Response> notSslRecordException(final NotSslRecordException exception) {
-		return logResponse(exception, Reply.SSL_RECORD);
+		return buildResponse(exception, Reply.SSL_RECORD);
 	}
 
 	@ExceptionHandler(NullPointerException.class)
 	public ResponseEntity<Response> nullPointerException(final NullPointerException exception) {
-		return logResponse(exception, Reply.NULL_POINTER);
+		return buildResponse(exception, Reply.NULL_POINTER);
 	}
 
 	@ExceptionHandler(NumberFormatException.class)
 	public ResponseEntity<Response> numberFormatException(final NumberFormatException exception) {
-		return logResponse(exception, Reply.NUMBER_FORMAT);
+		return buildResponse(exception, Reply.NUMBER_FORMAT);
 	}
 
 	@ExceptionHandler(PrematureCloseException.class)
 	public ResponseEntity<Response> prematureCloseException(final PrematureCloseException exception) {
-		return logResponse(exception, Reply.PREMATURE_CLOSE);
+		return buildResponse(exception, Reply.PREMATURE_CLOSE);
 	}
 
 	@ExceptionHandler(RarityException.class)
 	public ResponseEntity<Response> rarityException(final RarityException exception) {
-		return ResponseEntity.ok(new Response(exception.getReply()));
+		return buildResponse(exception, exception.getReply());
 	}
 
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<Response> runtimeException(final RuntimeException exception) {
-		return logResponse(exception, Reply.RUNTIME);
+		return buildResponse(exception, Reply.RUNTIME);
 	}
 
 	@ExceptionHandler(UnknownHostException.class)
 	public ResponseEntity<Response> unknownHostException(final UnknownHostException exception) {
-		return logResponse(exception, Reply.UNKNOWN_HOST);
+		return buildResponse(exception, Reply.UNKNOWN_HOST);
 	}
 
 	@ExceptionHandler({ BadRequest.class, NotFound.class, WebClientResponseException.class })
 	public ResponseEntity<Response> webClientResponseException(final WebClientResponseException exception) {
-		return logResponse(exception, Reply.CLIENT_RESPONSE);
+		return buildResponse(exception, Reply.CLIENT_RESPONSE);
 	}
 
 }
