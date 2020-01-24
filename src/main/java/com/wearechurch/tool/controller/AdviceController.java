@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.codec.CodecException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -17,6 +18,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.web.reactive.function.client.WebClientResponseException.BadRequest;
 import org.springframework.web.reactive.function.client.WebClientResponseException.NotFound;
 
+import com.wearechurch.tool.configuration.Properties;
 import com.wearechurch.tool.dto.Response;
 import com.wearechurch.tool.enumerator.Reply;
 import com.wearechurch.tool.exception.RarityException;
@@ -29,76 +31,80 @@ public class AdviceController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdviceController.class);
 
-	private static final ResponseEntity<Response> logResponse(final Exception exception, final Reply reply) {
-		AdviceController.LOGGER.error("Code: {} | ClassName: {} | Message: {}", reply.getCode(),
-				exception.getClass().getName(), exception.getLocalizedMessage());
-		return ResponseEntity.ok(new Response(reply));
-	}
+	@Autowired
+	private Properties properties;
 
 	@ExceptionHandler(BindException.class)
 	public ResponseEntity<Response> bindException(final BindException exception) {
-		return AdviceController.logResponse(exception, Reply.BIND);
+		return logResponse(exception, Reply.BIND);
 	}
 
 	@ExceptionHandler(CodecException.class)
 	public ResponseEntity<Response> codecException(final CodecException exception) {
-		return AdviceController.logResponse(exception, Reply.CODEC_CODEC);
+		return logResponse(exception, Reply.CODEC);
 	}
 
 	@ExceptionHandler(ConnectException.class)
 	public ResponseEntity<Response> connectException(final ConnectException exception) {
-		return AdviceController.logResponse(exception, Reply.NET_CONNECT);
+		return logResponse(exception, Reply.CONNECT);
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Response> exception(final Exception exception) {
-		return AdviceController.logResponse(exception, Reply.EXCEPTION);
+		return logResponse(exception, Reply.EXCEPTION);
 	}
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<Response> httpMessageNotReadableException(final HttpMessageNotReadableException exception) {
-		return AdviceController.logResponse(exception, Reply.MESSAGE_READABLE);
+		return logResponse(exception, Reply.MESSAGE_READABLE);
 	}
 
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public final ResponseEntity<Response> httpRequestMethodNotSupportedException(
 			final HttpRequestMethodNotSupportedException exception) {
-		return AdviceController.logResponse(exception, Reply.REQUEST_SUPPORTED);
+		return logResponse(exception, Reply.REQUEST_SUPPORTED);
 	}
 
 	@ExceptionHandler(IllegalStateException.class)
 	public ResponseEntity<Response> illegalStateException(final IllegalStateException exception) {
-		return AdviceController.logResponse(exception, Reply.ILLEGAL_STATE);
+		return logResponse(exception, Reply.ILLEGAL_STATE);
 	}
 
 	@ExceptionHandler(IndexOutOfBoundsException.class)
 	public ResponseEntity<Response> indexOutOfBoundsException(final IndexOutOfBoundsException exception) {
-		return AdviceController.logResponse(exception, Reply.INDEX_BOUNDS);
+		return logResponse(exception, Reply.INDEX_BOUNDS);
+	}
+
+	private final ResponseEntity<Response> logResponse(final Exception exception, final Reply reply) {
+		AdviceController.LOGGER.error("Application: {}\nCode: {}\nClassName: {}\nMessage: {}",
+				properties.getSpringApplicationName(), reply.getCode(), exception.getClass().getName(),
+				exception.getLocalizedMessage());
+		return ResponseEntity.ok(new Response(reply));
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Response> methodArgumentNotValidException(final MethodArgumentNotValidException exception) {
-		return AdviceController.logResponse(exception, Reply.METHOD_ARGUMENT);
+		return logResponse(exception, Reply.METHOD_ARGUMENT);
 	}
 
 	@ExceptionHandler(NotSslRecordException.class)
 	public ResponseEntity<Response> notSslRecordException(final NotSslRecordException exception) {
-		return AdviceController.logResponse(exception, Reply.SSL_RECORD);
+		return logResponse(exception, Reply.SSL_RECORD);
 	}
 
 	@ExceptionHandler(NullPointerException.class)
 	public ResponseEntity<Response> nullPointerException(final NullPointerException exception) {
-		return AdviceController.logResponse(exception, Reply.NULL_POINTER);
+		return logResponse(exception, Reply.NULL_POINTER);
 	}
 
 	@ExceptionHandler(NumberFormatException.class)
 	public ResponseEntity<Response> numberFormatException(final NumberFormatException exception) {
-		return AdviceController.logResponse(exception, Reply.NUMBER_FORMAT);
+		return logResponse(exception, Reply.NUMBER_FORMAT);
 	}
 
 	@ExceptionHandler(PrematureCloseException.class)
 	public ResponseEntity<Response> prematureCloseException(final PrematureCloseException exception) {
-		return AdviceController.logResponse(exception, Reply.PREMATURE_CLOSE);
+		return logResponse(exception, Reply.PREMATURE_CLOSE);
 	}
 
 	@ExceptionHandler(RarityException.class)
@@ -108,17 +114,17 @@ public class AdviceController {
 
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<Response> runtimeException(final RuntimeException exception) {
-		return AdviceController.logResponse(exception, Reply.RUNTIME);
+		return logResponse(exception, Reply.RUNTIME);
 	}
 
 	@ExceptionHandler(UnknownHostException.class)
 	public ResponseEntity<Response> unknownHostException(final UnknownHostException exception) {
-		return AdviceController.logResponse(exception, Reply.UNKNOWN_HOST);
+		return logResponse(exception, Reply.UNKNOWN_HOST);
 	}
 
 	@ExceptionHandler({ BadRequest.class, NotFound.class, WebClientResponseException.class })
 	public ResponseEntity<Response> webClientResponseException(final WebClientResponseException exception) {
-		return AdviceController.logResponse(exception, Reply.CLIENT_RESPONSE);
+		return logResponse(exception, Reply.CLIENT_RESPONSE);
 	}
 
 }
