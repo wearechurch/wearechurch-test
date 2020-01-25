@@ -24,6 +24,8 @@ public enum Reply {
 
 	NULL_POINTER(108, "Se intenta usar <null> en un caso donde se requiere un objeto."),
 
+	SUCH_ELEMENT(176, "No hay más elementos en la enumeración."),
+
 	CLIENT_RESPONSE(204, "Se contienen datos de respuesta HTTP reales."),
 
 	SSL_RECORD(228, "Se intenta usar una conexión segura y otra conexión simple."),
